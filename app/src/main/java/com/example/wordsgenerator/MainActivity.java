@@ -21,7 +21,7 @@ public final class MainActivity extends AppCompatActivity {
     private TextView word;
     private TextView translateWord;
     private ConstraintLayout myLayout = null;
-    private int wordRandomNumber;
+    private int wordRandomNumber = 9735;
 
 //    public void _$_clearFindViewByIdCache() {
 //        if (this.findViewCache != null) {
@@ -49,12 +49,17 @@ public final class MainActivity extends AppCompatActivity {
         myLayout = findViewById(R.id.myLayout);
         word = findViewById(R.id.word);
         translateWord = findViewById(R.id.translate_word);
+
         try {
             wordsList = readWords();
             translateWordsList = readTranslateWords();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        word.setText(wordsList.get(wordRandomNumber));
+        translateWord.setText(translateWordsList.get(wordRandomNumber));
+
         myLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -79,6 +84,12 @@ public final class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+//        for(int i = 0; i < wordsList.size(); i++){
+//            if(wordsList.get(i).equals("hello")){
+//                Toast.makeText(getApplicationContext(), "id: "+i, Toast.LENGTH_LONG).show();
+//            }
+//        }
     }
 
     public final ArrayList<String> readWords() throws IOException {
