@@ -38,7 +38,6 @@ public final class MainActivity extends AppCompatActivity {
     private TextView translateWord;
     private ConstraintLayout myLayout = null;
     private int wordRandomNumber = 9735;
-
     private Switch aSwitch;
 
     @Override
