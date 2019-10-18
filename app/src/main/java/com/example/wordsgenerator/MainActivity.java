@@ -1,12 +1,18 @@
 package com.example.wordsgenerator;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -14,6 +20,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+
+/*  ENGLISH WORDS GENERATOR v1.0
+[Streams]           - Read data from file (word and translateWordsList in different files);
+[List]              - ArrayList contain all data from read files;
+[OnTouchListener]   - OnTouchListener when touched on screen word change (ConstraintLayout have variable and method myLayout.setOnTouchListener);
+[Bundle]            - Bundle restore data when screen change orientation;
+[Menu]              - Items in Menu witch have switch-case to define click of particular ItemMenu;
+[Switch]            - Switch in Menu witch has setOnCheckedChangeListener;
+[AlertDialog]       - AlertDialog in Menu is dialog with buttons 'Yes' or 'No' (are you sure to close the project? Yes : No).
+ */
 
 public final class MainActivity extends AppCompatActivity {
     private ArrayList<String> wordsList;
@@ -23,24 +39,7 @@ public final class MainActivity extends AppCompatActivity {
     private ConstraintLayout myLayout = null;
     private int wordRandomNumber = 9735;
 
-//    public void _$_clearFindViewByIdCache() {
-//        if (this.findViewCache != null) {
-//            this.findViewCache.clear();
-//        }
-//    }
-//
-//    public View _$_findCachedViewById(int i) {
-//        if (this.findViewCache == null) {
-//            this.findViewCache = new HashMap();
-//        }
-//        View view = (View) this.findViewCache.get(Integer.valueOf(i));
-//        if (view != null) {
-//            return view;
-//        }
-//        View findViewById = findViewById(i);
-//        this.findViewCache.put(Integer.valueOf(i), findViewById);
-//        return findViewById;
-//    }
+    private Switch aSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +91,7 @@ public final class MainActivity extends AppCompatActivity {
 //        }
     }
 
+    // [START CREATE DICTIONARIES OF WORDS]
     public final ArrayList<String> readWords() throws IOException {
         ArrayList<String> list = new ArrayList<>();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.words)));
@@ -111,7 +111,10 @@ public final class MainActivity extends AppCompatActivity {
         bufferedReader.close();
         return list;
     }
+    // [END CREATE DICTIONARIES OF WORDS]
 
+
+    // [START BUNDLE RESTORE DATA]
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -128,5 +131,67 @@ public final class MainActivity extends AppCompatActivity {
         this.wordRandomNumber = savedInstanceState.getInt("WORD_NUMBER");
         word.setText(wordsList.get(wordRandomNumber));
         translateWord.setText(translateWordsList.get(wordRandomNumber));
+    }
+    // [END BUNDLE RESTORE DATA]
+
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        getMenuInflater().inflate(R.menu.mymenu, menu);
+        aSwitch = menu.findItem(R.id.switchOnOffItem).getActionView().findViewById(R.id.switchOnOff);
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (!b){
+                    translateWord.setVisibility(View.INVISIBLE);
+                }else{
+                    translateWord.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_add:
+                Toast.makeText(getApplicationContext(), "ADD", Toast.LENGTH_SHORT).show();
+                break;
+            //[START EXIT FORM APP]
+            case R.id.exit_project:
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+                alertBuilder.setMessage("Вы хотите закрыть приложение?")
+                        .setCancelable(false)
+                        .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+                AlertDialog alertDialog = alertBuilder.create();
+                alertDialog.setTitle("Закрытие приложения");
+                alertDialog.show();
+                break;
+            //[END EXIT FORM APP]
+            case R.id.menu_on_off:
+                if(translateWord.getVisibility() == View.VISIBLE) {
+                    translateWord.setVisibility(View.INVISIBLE);
+                    item.setTitle("Turn on translate");
+                }
+                else{
+                    translateWord.setVisibility(View.VISIBLE);
+                    item.setTitle("Turn off translate");
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
