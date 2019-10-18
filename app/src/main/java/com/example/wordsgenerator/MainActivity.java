@@ -38,7 +38,9 @@ public final class MainActivity extends AppCompatActivity {
     private TextView translateWord;
     private ConstraintLayout myLayout = null;
     private int wordRandomNumber = 9735;
+
     private Switch aSwitch;
+    private boolean aSwitchVisible = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +120,7 @@ public final class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("WORD_NUMBER", wordRandomNumber);
+        outState.putBoolean("SWITCH_STATUS", aSwitch.isChecked());
 
         //outState.putString("WORD", word.getText().toString());
         //outState.putString("TRANSLATE_WORD", translateWord.getText().toString());
@@ -130,6 +133,12 @@ public final class MainActivity extends AppCompatActivity {
         this.wordRandomNumber = savedInstanceState.getInt("WORD_NUMBER");
         word.setText(wordsList.get(wordRandomNumber));
         translateWord.setText(translateWordsList.get(wordRandomNumber));
+        aSwitchVisible = savedInstanceState.getBoolean("SWITCH_STATUS");
+        if (!aSwitchVisible) {
+            translateWord.setVisibility(View.INVISIBLE);
+        } else {
+            translateWord.setVisibility(View.VISIBLE);
+        }
     }
     // [END BUNDLE RESTORE DATA]
 
@@ -138,6 +147,7 @@ public final class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(final Menu menu) {
         getMenuInflater().inflate(R.menu.mymenu, menu);
         aSwitch = menu.findItem(R.id.switchOnOffItem).getActionView().findViewById(R.id.switchOnOff);
+        aSwitch.setChecked(aSwitchVisible);
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

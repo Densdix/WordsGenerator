@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Words Generator</string>
+    <string name="app_name">Words Generator v1.0</string>
     <string name="random_word">Random word</string>
     <string name="translate_word">Translate word</string>
 </resources>
