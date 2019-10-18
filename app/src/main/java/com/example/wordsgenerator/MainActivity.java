@@ -142,9 +142,9 @@ public final class MainActivity extends AppCompatActivity {
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (!b){
+                if (!b) {
                     translateWord.setVisibility(View.INVISIBLE);
-                }else{
+                } else {
                     translateWord.setVisibility(View.VISIBLE);
                 }
             }
@@ -155,7 +155,7 @@ public final class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_add:
                 Toast.makeText(getApplicationContext(), "ADD", Toast.LENGTH_SHORT).show();
                 break;
@@ -182,11 +182,10 @@ public final class MainActivity extends AppCompatActivity {
                 break;
             //[END EXIT FORM APP]
             case R.id.menu_on_off:
-                if(translateWord.getVisibility() == View.VISIBLE) {
+                if (translateWord.getVisibility() == View.VISIBLE) {
                     translateWord.setVisibility(View.INVISIBLE);
                     item.setTitle("Turn on translate");
-                }
-                else{
+                } else {
                     translateWord.setVisibility(View.VISIBLE);
                     item.setTitle("Turn off translate");
                 }
